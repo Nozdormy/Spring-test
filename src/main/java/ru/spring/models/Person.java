@@ -1,9 +1,6 @@
 package ru.spring.models;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 public class Person {
     private int id;
@@ -19,15 +16,22 @@ public class Person {
     @Email(message = "Email should be valid")
     private String email;
 
+    //Страна, Город, Индекс(6 цифр)
+    //https://www.rexegg.com/regex-quickstart.html - помогает составить регулярное выражение для описания патерна
+    @Pattern(regexp = "[A-Z]\\w+, [A-Z]\\w+, \\d{6}",
+            message = "Your address should be in this form: Country, City, Postal Code(6 digits)")
+    private String address;
+
     public Person() {
 
     }
 
-    public Person(int id, String name, int age, String email) {
+    public Person(int id, String name, int age, String email, String address) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.email = email;
+        this.address = address;
     }
 
     public int getId() {
@@ -60,5 +64,13 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
