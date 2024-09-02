@@ -52,6 +52,11 @@ public class Person {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
+
+    // @Enumerated(EnumType.STRING)  Пишет само значение вместо индекса
+    @Enumerated(EnumType.ORDINAL) //   По умолчанию такой сохраняет индекс по которому лежит настроение
+    private Mood mood;
+
     public Person() {
 
     }
@@ -117,6 +122,14 @@ public class Person {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Mood getMood() {
+        return mood;
+    }
+
+    public void setMood(Mood mood) {
+        this.mood = mood;
     }
 
     @Override

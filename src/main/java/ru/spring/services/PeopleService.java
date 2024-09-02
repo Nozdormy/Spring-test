@@ -3,6 +3,7 @@ package ru.spring.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.spring.models.Mood;
 import ru.spring.models.Person;
 import ru.spring.repositories.PeopleRepository;
 
@@ -34,6 +35,7 @@ public class PeopleService {
     @Transactional
     public void save(Person person) {
         person.setCreatedAt(new Date());
+        person.setMood(Mood.CALM);     // будет сохранена 4 т.к. значение лежит в массиве под 4 идексом
         peopleRepository.save(person);
     }
 
