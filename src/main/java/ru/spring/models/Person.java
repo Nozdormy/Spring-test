@@ -1,11 +1,12 @@
 package ru.spring.models;
 
-import jakarta.persistence.*;
 
+import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.List;
 
 @Entity
-@Table(name = "person")
+@Table(name = "Person")
 public class Person {
 
     @Id
@@ -31,8 +32,11 @@ public class Person {
     //https://www.rexegg.com/regex-quickstart.html - помогает составить регулярное выражение для описания патерна
     @Pattern(regexp = "[A-Z]\\w+, [A-Z]\\w+, \\d{6}",
             message = "Your address should be in this form: Country, City, Postal Code(6 digits)")
-    @Column(name = "adddress")
+    @Column(name = "address")
     private String address;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Item> items;
 
     public Person() {
 
@@ -47,6 +51,10 @@ public class Person {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
