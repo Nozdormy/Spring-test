@@ -1,20 +1,48 @@
 package ru.spring.dao;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.spring.models.Person;
 
+import javax.persistence.EntityManager;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
+import java.util.Set;
 
 @Component
 public class PersonDAO {
 
-    private final SessionFactory sessionFactory;
+    private final EntityManager entityManager;
 
+    public PersonDAO(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+    @Transactional(readOnly = true)
+    public void testNPlus1() {
+        Session session = entityManager.unwrap(Session.class);
+
+/*        // 1 запрос
+        List<Person> people = session.createQuery("select p from Person p", Person.class)
+                .getResultList();
+
+        // N запросов к БД
+        for (Person person : people) {
+            System.out.println("Person :" + person.getName() + " has : " + person.getItems());
+        }*/
+
+        // Решение, не забыть переопределить hashCode and equals
+        Set<Person> people = new HashSet<>(session.createQuery("select p from Person p left join fetch p.items", Person.class)
+                .getResultList());
+
+        for (Person person : people) {
+            System.out.println("Person :" + person.getName() + " has : " + person.getItems());
+        }
+    }
+
+
+    /*private final SessionFactory sessionFactory;
     @Autowired
     public PersonDAO(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -63,5 +91,5 @@ public class PersonDAO {
     public void delete(int id) {
         Session session = sessionFactory.getCurrentSession();
         session.remove(session.get(Person.class, id));
-    }
+    }*/
 }
